@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Dashboard</title>
+    <style>
+        body {
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    {% if user %}
+        <h1>Welcome, {{ user.username }}!</h1>
+        <p>Balance: ${{ user.balance }}</p>
+
+        <form method="post" action="{{ url_for('transfer') }}">
+            <label for="recipient">Recipient:</label>
+            <input type="text" id="recipient" name="recipient" required>
+            <br>
+            <label for="amount">Amount:</label>
+            <input type="number" id="amount" name="amount" step="0.01" min="0.01" required>
+            <br>
+            <input type="submit" value="Transfer">
+        </form>
+
+        <button id="toggleBalance" class="btn btn-primary">Toggle balance</button> 
+        <p id="balance" style="display: block">Current Balance: ${{ user.balance }}</p>
+
+        <hr>
+
+        <h3>Navigation</h3>
+        <ul>
+            <li><a href="{{ url_for('home') }}">Home</a></li>
+            <li><a href="{{ url_for('logout') }}">Logout</a></li>
+        </ul>
+
+        <script>
+            document.getElementById('toggleBalance').addEventListener('click', function () {
+                var balanceElement = document.getElementById('balance');
+                balanceElement.style.display = (balanceElement.style.display === 'none' || balanceElement.style.display === '') ? 'block' : 'none';
+            });
+        </script>
+        {% else %}
+        <p>User not found. Please <a href="{{ url_for('login') }}">login</a>.</p>
+    {% endif %}
+</body>
+</html>
